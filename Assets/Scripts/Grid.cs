@@ -9,7 +9,7 @@ public class Grid : MonoBehaviour
     [SerializeField] int length = 25;
     [SerializeField] float cellSize = 1f;
     [SerializeField] LayerMask obstacleLayer;
-    private void Start() 
+    private void Awake() 
     {
         GenerateGrid();
         
@@ -18,6 +18,15 @@ public class Grid : MonoBehaviour
     private void GenerateGrid()
     {
         grid = new Node[length, width];
+
+        for (int y = 0; y < width; y++)
+        {
+            for (int x = 0; x < length; x++)
+            {
+                grid[x,y] = new Node();
+            }
+        }
+
         CheckPassable();
     }
 
@@ -27,12 +36,57 @@ public class Grid : MonoBehaviour
         {
             for (int x = 0; x < length; x++)
             {
-                Vector3 WorldPos = GetWorldPosition(x,y);
-                bool passable = !Physics.CheckBox(WorldPos, Vector3.one/2 * cellSize, Quaternion.identity, obstacleLayer);
+                Vector3 worldPos = GetWorldPosition(x,y);
+                bool passable = !Physics.CheckBox(worldPos, Vector3.one/2 * cellSize, Quaternion.identity, obstacleLayer);
                 grid[x,y] = new Node();
                 grid[x,y].passable = passable;
             }
         }
+    }
+
+    public bool CheckBoundry(Vector2Int posOnGrid)
+    {
+        if (posOnGrid.x < 0 || posOnGrid.x >= length)
+        {
+            return false;
+        }
+        if (posOnGrid.y < 0 || posOnGrid.y >= width)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public Vector2Int GetGridPos(Vector3 worldPos)
+    {
+        worldPos -= transform.position;
+        Vector2Int posOnGrid = new Vector2Int((int)(worldPos.x/cellSize), (int)(worldPos.z/cellSize));
+        return posOnGrid;
+    }
+
+    public void PlaceObject(Vector2Int posOnGrid, GridObject gridObject)
+    {
+        if (CheckBoundry(posOnGrid) == true)
+        {
+            grid[posOnGrid.x, posOnGrid.y].gridObject = gridObject;
+        }
+        else
+        {
+            Debug.Log("out of limits");
+        }
+        
+    }
+
+    public GridObject GetPlacedObject(Vector2Int gridpos)
+    {
+        if (CheckBoundry(gridpos) == true)
+        {
+            GridObject gridObject = grid[gridpos.x, gridpos.y].gridObject;
+            return gridObject;
+        }
+        return null;
+        
+        
     }
 
 
