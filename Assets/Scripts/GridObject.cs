@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GridObject : MonoBehaviour
 {
-    [SerializeField] Grid targetGrid;
+    public Grid targetGrid;
+    public Vector2Int posOnGrid;
 
 
     private void Start()
@@ -15,7 +16,9 @@ public class GridObject : MonoBehaviour
     // Update is called once per frame
     private void Init()
     {
-        Vector2Int posOnGrid = targetGrid.GetGridPos(transform.position);
+        posOnGrid = targetGrid.GetGridPos(transform.position);
         targetGrid.PlaceObject(posOnGrid, this);
+        Vector3 pos = targetGrid.GetWorldPosition(posOnGrid.x, posOnGrid.y, true);
+        transform.position = pos;
     }
 }

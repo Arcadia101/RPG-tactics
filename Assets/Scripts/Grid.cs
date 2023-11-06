@@ -16,6 +16,18 @@ public class Grid : MonoBehaviour
         
     }
 
+    public List<Vector3> ConvertPathNodesToWorldPos(List<PathNode> path)
+    {
+        List<Vector3> worldPos = new List<Vector3>();
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            worldPos.Add(GetWorldPosition(path[i].pos_x, path[i].pos_y, true));
+        }
+
+        return worldPos;
+    }
+
     private void GenerateGrid()
     {
         grid = new Node[length, width];
@@ -96,7 +108,8 @@ public class Grid : MonoBehaviour
 
     public Vector2Int GetGridPos(Vector3 worldPos)
     {
-        worldPos -= transform.position;
+        worldPos.x += cellSize / 2;
+        worldPos.z += cellSize / 2;
         Vector2Int posOnGrid = new Vector2Int((int)(worldPos.x/cellSize), (int)(worldPos.z/cellSize));
         return posOnGrid;
     }
