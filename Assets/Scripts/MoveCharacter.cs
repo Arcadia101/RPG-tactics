@@ -12,10 +12,20 @@ public class MoveCharacter : MonoBehaviour
     Pathfinding pathfinding;
     List<PathNode> path;
 
+    [SerializeField] GridHighlight gridHighlight;
+
 
     private void Start() 
     {
         pathfinding = targetGrid.GetComponent<Pathfinding>();
+        CheckWalkableTerrain();
+    }
+
+    void CheckWalkableTerrain()
+    {
+        List<PathNode> walkableNodes = new List<PathNode>();
+        pathfinding.CalculateWalkableNodes(targetCharacter.posOnGrid.x, targetCharacter.posOnGrid.y, targetCharacter.GetComponent<Character>().movementPoints, ref walkableNodes);
+        gridHighlight.Highlight(walkableNodes);
     }
 
     private void Update() 
@@ -28,8 +38,10 @@ public class MoveCharacter : MonoBehaviour
             {
                 Vector2Int gridPos = targetGrid.GetGridPos(hit.point);
 
-                path = pathfinding.FindPath(targetCharacter.posOnGrid.x, targetCharacter.posOnGrid.y, gridPos.x, gridPos.y);
+                //path = pathfinding.FindPath(targetCharacter.posOnGrid.x, targetCharacter.posOnGrid.y, gridPos.x, gridPos.y);
+                path = pathfinding.TraceBackPath(gridPos.x, gridPos.y);
 
+                path.Reverse();
                 if (path == null)
                 {
                     return;
