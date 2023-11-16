@@ -5,24 +5,30 @@ using UnityEngine;
 public class GridHighlight : MonoBehaviour
 {
     Grid grid;
-    [SerializeField] GameObject movePoint;
-    [SerializeField] GameObject movePointsContainer;
-    List<GameObject> movePointGOs;
-    [SerializeField] List<Vector2Int> targetPos;
+    [SerializeField] GameObject highlightPoint;
+    [SerializeField] GameObject container;
+    List<GameObject> highlightPointsGO;
 
     void Start()
     {
-        grid = GetComponent<Grid>();
-        movePointGOs = new List<GameObject>();
-        //Highlight(targetPos);
+        grid = GetComponentInParent<Grid>();
+        highlightPointsGO = new List<GameObject>();
         
+    }
+
+    public void Hide()
+    {
+        for (int i = 0; i < highlightPointsGO.Count; i++)
+        {
+            highlightPointsGO[i].SetActive(false);
+        }
     }
 
     public void Highlight(List<Vector2Int> positions)
     {
         for (int i = 0; i < positions.Count; i++)
         {
-            Highlight(positions[i].x, positions[i].y, GetMovePointGO(i));
+            Highlight(positions[i].x, positions[i].y, GetHighlightPointGO(i));
         }
         
     }
@@ -31,35 +37,36 @@ public class GridHighlight : MonoBehaviour
     {
         for (int i = 0; i < positions.Count; i++)
         {
-            Highlight(positions[i].pos_x, positions[i].pos_y, GetMovePointGO(i));
+            Highlight(positions[i].pos_x, positions[i].pos_y, GetHighlightPointGO(i));
         }
         
     }
 
-    private GameObject GetMovePointGO(int i)
+    private GameObject GetHighlightPointGO(int i)
     {
-        if (movePointGOs.Count < i)
+        if (highlightPointsGO.Count < i)
         {
-            return movePointGOs[i];
+            return highlightPointsGO[i];
         }
 
-        GameObject newHighlightObject = CreateMovePointHighlightObject();
+        GameObject newHighlightObject = CreatePointHighlightObject();
         return newHighlightObject;
     }
 
     void Highlight(int posX, int posY, GameObject highlightObject)
     {
+        highlightObject.SetActive(true);
         Vector3 pos = grid.GetWorldPosition(posX, posY, true);
         pos += Vector3.up * 0.2f;
         highlightObject.transform.position = pos;
 
     }
 
-    private GameObject CreateMovePointHighlightObject() 
+    private GameObject CreatePointHighlightObject() 
     {
-        GameObject go = Instantiate(movePoint);
-        movePointGOs.Add(go);
-        go.transform.SetParent(movePointsContainer.transform);
+        GameObject go = Instantiate(highlightPoint);
+        highlightPointsGO.Add(go);
+        go.transform.SetParent(container.transform);
         return go;
     }
 }

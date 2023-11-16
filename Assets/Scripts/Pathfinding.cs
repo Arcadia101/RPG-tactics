@@ -21,6 +21,13 @@ public class PathNode
         pos_x = xPos;
         pos_y = yPos;
     }
+
+    public void Clear()
+    {
+        gValue = 0f;
+        hValue = 0f;
+        parentNode = null;
+    }
 }
 
 [RequireComponent(typeof(Grid))]
@@ -55,7 +62,18 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-    public void CalculateWalkableNodes(int startX, int startY, float range, ref List<PathNode>toHighlight)
+    public void Clear()
+    {
+        for (int x = 0; x < gridMap.length; x++)
+            {
+                for (int y = 0; y < gridMap.width; y++)
+                {
+                    pathNodes[x,y].Clear();
+                }
+            }
+    }
+
+    public void CalculateWalkableNodes(int startX, int startY, float range, ref List<PathNode> toHighlight)
     {
         PathNode startNode = pathNodes[startX,startY];
 

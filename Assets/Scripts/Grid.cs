@@ -114,6 +114,22 @@ public class Grid : MonoBehaviour
         return posOnGrid;
     }
 
+    public void RemoveObject(Vector2Int posOnGrid, GridObject gridObject)
+    {
+        if (CheckBoundry(posOnGrid) == true)
+        {
+            if (grid[posOnGrid.x, posOnGrid.y].gridObject == gridObject)
+            {
+                return;
+            }
+            grid[posOnGrid.x, posOnGrid.y].gridObject = null;
+        }
+        else
+        {
+            Debug.Log("out of limits");
+        }
+    }
+
     public void PlaceObject(Vector2Int posOnGrid, GridObject gridObject)
     {
         if (CheckBoundry(posOnGrid) == true)

@@ -5,37 +5,47 @@ using UnityEngine;
 public class MoveCharacter : MonoBehaviour
 {
     [SerializeField] Grid targetGrid;
-    [SerializeField] LayerMask terrainLayer;
-
-    [SerializeField] GridObject targetCharacter;
 
     Pathfinding pathfinding;
-    List<PathNode> path;
 
     [SerializeField] GridHighlight gridHighlight;
 
 
-    private void Start() 
+    private void Awake() 
     {
         pathfinding = targetGrid.GetComponent<Pathfinding>();
-        CheckWalkableTerrain();
     }
 
-    void CheckWalkableTerrain()
+    public void CheckWalkableTerrain(Character targetCharacter)
     {
+        GridObject gridObject = targetCharacter.GetComponent<GridObject>();
         List<PathNode> walkableNodes = new List<PathNode>();
-        pathfinding.CalculateWalkableNodes(targetCharacter.posOnGrid.x, targetCharacter.posOnGrid.y, targetCharacter.GetComponent<Character>().movementPoints, ref walkableNodes);
+        pathfinding.Clear();
+        pathfinding.CalculateWalkableNodes(gridObject.posOnGrid.x, gridObject.posOnGrid.y, targetCharacter.movementPoints, ref walkableNodes);
+        gridHighlight.Hide();
         gridHighlight.Highlight(walkableNodes);
+    }
+
+    public List<PathNode> GetPath(Vector2Int from)
+    {
+        List<PathNode> path = pathfinding.TraceBackPath(from.x, from.y);
+
+        path.Reverse();
+        if (path == null)
+        {
+            return null;
+        }
+        if (path.Count == 0)
+        {
+            return null;
+        }
+        return path;
     }
 
     private void Update() 
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, float.MaxValue, terrainLayer))
-            {
+        
+                /*
                 Vector2Int gridPos = targetGrid.GetGridPos(hit.point);
 
                 //path = pathfinding.FindPath(targetCharacter.posOnGrid.x, targetCharacter.posOnGrid.y, gridPos.x, gridPos.y);
@@ -51,7 +61,6 @@ public class MoveCharacter : MonoBehaviour
                     return;
                 }
                 targetCharacter.GetComponent<Movement>().Move(path);
-            }
-        }
+                */
     }
 }
