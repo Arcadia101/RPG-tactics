@@ -26,9 +26,16 @@ public class Command
 
 public class CommandManager : MonoBehaviour
 {
-    Command currentComand;
+    ClearUtility clearUtility;
+
+    Command currentCommand;
 
     CommandInput commandInput;
+
+    private void Awake() 
+    {
+        clearUtility = GetComponent<ClearUtility>();
+    }
 
     private void Start()
     {
@@ -37,7 +44,7 @@ public class CommandManager : MonoBehaviour
 
     private void Update() 
     {
-        if (currentComand != null)
+        if (currentCommand != null)
         {
             ExecuteCommand();
         }
@@ -45,40 +52,54 @@ public class CommandManager : MonoBehaviour
 
     public void ExecuteCommand()
     {
-        //MovementCommandExecute();
-        AttackCommandExecute();
+        switch (currentCommand.commandType)
+        {
+            case CommandType.Attack:
+            AttackCommandExecute();
+            break;
+
+            case CommandType.MoveTo:
+            MovementCommandExecute();
+            break;
+
+            default:
+            break;
+        }
     }
 
-    public void MovementCommandExecute()
+    private void MovementCommandExecute()
     {
-        Character receiver = currentComand.character;
-        receiver.GetComponent<Movement>().Move(currentComand.path);
-        currentComand = null;
-        commandInput.HighlightWalkableTerrain();
+        Character receiver = currentCommand.character;
+        receiver.GetComponent<Movement>().Move(currentCommand.path);
+        receiver.GetComponent<CharacterTurn>().canMove = false;
+        currentCommand = null;
+        clearUtility.ClearPathfinging();
+        clearUtility.ClearGridHighlightMove();
     }
 
-    public void AttackCommandExecute()
+    private void AttackCommandExecute()
     {
-        Character receiver = currentComand.character;
-        receiver.GetComponent<Attack>().AttackPos(currentComand.target);
-        currentComand = null;
-        commandInput.HighlightWalkableTerrain();
+        Character receiver = currentCommand.character;
+        receiver.GetComponent<Attack>().AttackPos(currentCommand.target);
+        receiver.GetComponent<CharacterTurn>().canAct = false;
+        currentCommand = null;
+        clearUtility.ClearGridHighlightAttack();
     }
 
     public void AddMoveCommand(Character character, Vector2Int selectedGrid, List<PathNode> path)
     {
-        currentComand = new Command(character, selectedGrid, CommandType.MoveTo);
-        currentComand.path = path;
+        currentCommand = new Command(character, selectedGrid, CommandType.MoveTo);
+        currentCommand.path = path;
     }
 
     public void AddAttackCommand(Character attaker, Vector2Int selectedGrid, GridObject target)
     {
-        currentComand = new Command(attaker, selectedGrid, CommandType.Attack);
-        currentComand.target = target;
+        currentCommand = new Command(attaker, selectedGrid, CommandType.Attack);
+        currentCommand.target = target;
     }
 
     public void AddCommand(Character character, Vector2Int selectedGrid, CommandType commandType)
     {
-        currentComand = new Command(character, selectedGrid, commandType);
+        currentCommand = new Command(character, selectedGrid, commandType);
     }
 }

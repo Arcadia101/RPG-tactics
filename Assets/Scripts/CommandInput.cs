@@ -8,6 +8,9 @@ public class CommandInput : MonoBehaviour
     MouseInput mouseInput;
     MoveCharacter moveCharacter;
     CharacterAttack characterAttack;
+    SelectCharacter selectCharacter;
+    ClearUtility clearUtility;
+
 
     void Awake()
     {
@@ -15,25 +18,61 @@ public class CommandInput : MonoBehaviour
         mouseInput = GetComponent<MouseInput>();
         moveCharacter = GetComponent<MoveCharacter>();
         characterAttack = GetComponent<CharacterAttack>();
+        selectCharacter = GetComponent<SelectCharacter>();
+        clearUtility = GetComponent<ClearUtility>();
     }
 
-    [SerializeField] Character selectedCharacter;
     [SerializeField] CommandType currentCommand;
 
-    void Start()
-    {
-        //HighlightWalkableTerrain();
-        HighlightAttackbleTerrain();
-        
-    }
+    bool isInputCommand;
 
     private void Update() 
     {
-        //MoveCommandInput();
-        AttackCommandInput();
+        if (isInputCommand == false)
+        {
+            return;
+        }
+        
+        switch (currentCommand)
+        {
+            case CommandType.Attack:
+            AttackCommandInput();
+            break;
+
+            case CommandType.MoveTo:
+            MoveCommandInput();
+            break;
+
+            default:
+            break;
+        }
     }
 
-    private void AttackCommandInput() {
+    public void SetCommandType(CommandType commandType)
+    {
+        currentCommand = commandType;
+    }
+
+    public void InitCommand()
+    {
+        isInputCommand = true;
+        switch (currentCommand)
+        {   
+            case CommandType.Attack:
+            HighlightAttackbleTerrain();
+            break;
+
+            case CommandType.MoveTo:
+            HighlightWalkableTerrain();
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    private void AttackCommandInput() 
+    {
         if (Input.GetMouseButtonDown(0))
         {
             if (characterAttack.Check(mouseInput.posOnGrid) == true)
@@ -43,17 +82,21 @@ public class CommandInput : MonoBehaviour
                 {
                     return;
                 }
-                commandManager.AddAttackCommand(selectedCharacter, mouseInput.posOnGrid, gridObject);
+                commandManager.AddAttackCommand(selectCharacter.selected, mouseInput.posOnGrid, gridObject);
+                StopCommandInput();
             }
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            
+            StopCommandInput();
+            clearUtility.ClearGridHighlightAttack();
+            //selectCharacter.selected.GetComponent<Movement>().SkipAnimation();
         }
     }
 
-    private void MoveCommandInput() {
+    private void MoveCommandInput() 
+    {
         if (Input.GetMouseButtonDown(0))
         {
             List<PathNode> path = moveCharacter.GetPath(mouseInput.posOnGrid);
@@ -65,22 +108,34 @@ public class CommandInput : MonoBehaviour
             {
                 return;
             }
-            commandManager.AddMoveCommand(selectedCharacter, mouseInput.posOnGrid, path);
+            commandManager.AddMoveCommand(selectCharacter.selected, mouseInput.posOnGrid, path);
+            StopCommandInput();
+            
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            selectedCharacter.GetComponent<Movement>().SkipAnimation();
+            StopCommandInput();
+            clearUtility.ClearGridHighlightMove();
+            clearUtility.ClearPathfinging();
+            //selectCharacter.selected.GetComponent<Movement>().SkipAnimation();
         }
+    }
+
+    public void StopCommandInput()
+    {
+        selectCharacter.Deselect();
+        selectCharacter.enabled = true;
+        isInputCommand = false;
     }
 
     public void HighlightWalkableTerrain()
     {
-        moveCharacter.CheckWalkableTerrain(selectedCharacter);
+        moveCharacter.CheckWalkableTerrain(selectCharacter.selected);
     }
 
     public void HighlightAttackbleTerrain()
     {
-        characterAttack.CalculateAttackArea(selectedCharacter.GetComponent<GridObject>().posOnGrid, selectedCharacter.attackRange);
+        characterAttack.CalculateAttackArea(selectCharacter.selected.GetComponent<GridObject>().posOnGrid, selectCharacter.selected.attackRange);
     }
 }

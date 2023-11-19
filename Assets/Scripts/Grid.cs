@@ -118,10 +118,6 @@ public class Grid : MonoBehaviour
     {
         if (CheckBoundry(posOnGrid) == true)
         {
-            if (grid[posOnGrid.x, posOnGrid.y].gridObject == gridObject)
-            {
-                return;
-            }
             grid[posOnGrid.x, posOnGrid.y].gridObject = null;
         }
         else

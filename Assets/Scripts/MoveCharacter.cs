@@ -30,7 +30,6 @@ public class MoveCharacter : MonoBehaviour
     {
         List<PathNode> path = pathfinding.TraceBackPath(from.x, from.y);
 
-        path.Reverse();
         if (path == null)
         {
             return null;
@@ -39,6 +38,9 @@ public class MoveCharacter : MonoBehaviour
         {
             return null;
         }
+
+        path.Reverse();
+        
         return path;
     }
 
