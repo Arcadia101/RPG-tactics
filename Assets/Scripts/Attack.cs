@@ -5,15 +5,21 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     GridObject gridObject;
+    //CharacterAnimator characterAnimator;
+    Character character;
     
     void Awake()
     {
+        character = GetComponent<Character>();
         gridObject = GetComponent<GridObject>();
+        //characterAnimator = GetComponent<CharacterAnimator>();
     }
 
-    public void AttackPos(GridObject targetGridObject)
+    public void AttackGridObject(GridObject targetGridObject)
     {
         RotateCharacter(targetGridObject.transform.position);
+        //characterAnimator.Attack();
+        targetGridObject.GetComponent<Character>().TakeDamage(character.damage);
     }
 
     public void RotateCharacter(Vector3 towards)

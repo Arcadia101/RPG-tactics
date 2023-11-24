@@ -10,10 +10,15 @@ public class RoundManager : MonoBehaviour
     {
         instance = this;
     }
-    
-    List<CharacterTurn> characters;
+
+    [SerializeField] ForceContainer playerForceContainer;
+    [SerializeField] ForceContainer opponentForceContainer;
+    [SerializeField] ForceContainer allyForceContainer;
+
     int round = 1;
+
     [SerializeField] TMPro.TextMeshProUGUI turnCountText;
+    [SerializeField] TMPro.TextMeshProUGUI forceRoundText;
 
     private void Start() 
     {
@@ -22,27 +27,69 @@ public class RoundManager : MonoBehaviour
 
     public void AddMe(CharacterTurn character)
     {
-        if (characters == null)
+        if (character. allegiance == Allegiance.Player)
         {
-            characters = new List<CharacterTurn>();
+            playerForceContainer.AddMe(character);
         }
 
-        characters.Add(character);
+        if (character. allegiance == Allegiance.Opponent)
+        {
+            opponentForceContainer.AddMe(character);
+        }
+
+        if (character. allegiance == Allegiance.Ally)
+        {
+            allyForceContainer.AddMe(character);
+        }
+    }
+
+    Allegiance currentTurn;
+
+    public void NextTurn()
+    {
+        switch (currentTurn)
+        {
+            case Allegiance.Player:
+            currentTurn = Allegiance.Opponent;
+            break;
+            case Allegiance.Opponent:
+            currentTurn = Allegiance.Ally;
+            break;
+            case Allegiance.Ally:
+            NextRound();
+            currentTurn = Allegiance.Player;
+            break;
+        }
+
+        GrantTurnToForce();
+
+        UpdateTextOnScreen();
+    }
+
+    public void GrantTurnToForce()
+    {
+        switch (currentTurn)
+        {
+            case Allegiance.Player:
+            playerForceContainer.GrantTurn();
+            break;
+            case Allegiance.Opponent:
+            opponentForceContainer.GrantTurn();
+            break;
+            case Allegiance.Ally:
+            allyForceContainer.GrantTurn();
+            break;
+        }
     }
 
     public void NextRound()
     {
         round += 1;
-        UpdateTextOnScreen();
-
-        for (int i = 0; i < characters.Count; i++)
-        {
-            characters[i].GrantTurn();
-        }
     }
 
     void UpdateTextOnScreen()
     {
         turnCountText.text = "turn: " + round.ToString();
+        forceRoundText.text = currentTurn.ToString();
     }
 }

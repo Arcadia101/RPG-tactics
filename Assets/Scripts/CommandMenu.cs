@@ -5,6 +5,8 @@ using UnityEngine;
 public class CommandMenu : MonoBehaviour
 {
     [SerializeField] GameObject panel;
+    [SerializeField] GameObject attackButton;
+    [SerializeField] GameObject moveButton;
     CommandInput commandInput;
 
     SelectCharacter selectCharacter;
@@ -16,10 +18,36 @@ public class CommandMenu : MonoBehaviour
     }
 
 
-    public void OpenPanel()
+    public void OpenPanel(CharacterTurn characterTurn)
     {
         selectCharacter.enabled = false;
         panel.SetActive(true);
+
+        if (characterTurn.allegiance != Allegiance.Player)
+        {
+            attackButton.SetActive(false);
+            moveButton.SetActive(false);
+        }
+
+        else
+        {
+            if (characterTurn.canAct)
+            {
+                attackButton.SetActive(true);
+            }
+            else
+            {
+                attackButton.SetActive(false);
+            }
+            if (characterTurn.canMove)
+            {
+                moveButton.SetActive(true);
+            }
+            else
+            {
+                moveButton.SetActive(false);
+            }
+        }
     }
 
     public void ClosePanel()

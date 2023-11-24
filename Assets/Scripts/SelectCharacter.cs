@@ -73,7 +73,7 @@ public class SelectCharacter : MonoBehaviour
     {
         if (selected != null)
         {
-            commandMenu.OpenPanel();
+            commandMenu.OpenPanel(selected.GetComponent<CharacterTurn>());
         }
 
         else
