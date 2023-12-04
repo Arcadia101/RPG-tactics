@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DamageType
+{
+    Physical,
+    Magical
+}
+
 public class Attack : MonoBehaviour
 {
     GridObject gridObject;
@@ -19,7 +25,46 @@ public class Attack : MonoBehaviour
     {
         RotateCharacter(targetGridObject.transform.position);
         //characterAnimator.Attack();
-        targetGridObject.GetComponent<Character>().TakeDamage(character.damage);
+
+        if (Random.value >= character.accuracy)
+        {
+            Debug.Log("miss");
+            return;
+        }
+
+        
+        Character target = targetGridObject.GetComponent<Character>();
+
+        if (Random.value <= target.dodge)
+        {
+            Debug.Log("dodge");
+            return;
+        }
+
+        int damage = character.damage;
+
+        if (Random.value <= character.criticalChance)
+        {
+            damage = (int)(damage * character.criticalDamageMultiplicator);
+            Debug.Log("Critical");
+        }
+
+        switch (character.damageType)
+        {
+            case DamageType.Physical:
+            damage -= target.armor;
+            break;
+            case DamageType.Magical:
+            damage -= target.resistance;
+            break;
+        }
+
+        if (damage <= 0)
+        {
+            damage = 1;
+        }
+
+        target.TakeDamage(damage);
     }
 
     public void RotateCharacter(Vector3 towards)

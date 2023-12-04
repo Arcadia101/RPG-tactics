@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurnMenu : MonoBehaviour
 {
-    [SerializeField] GameObject turnPanel;
+    public GameObject turnPanel;
     SelectCharacter selectCharacter;
     void Awake()
     {
@@ -19,7 +19,7 @@ public class TurnMenu : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1))
         {
-            turnPanel.SetActive(true);
+            turnPanel.SetActive(!turnPanel.activeInHierarchy);
         }
     }
 }

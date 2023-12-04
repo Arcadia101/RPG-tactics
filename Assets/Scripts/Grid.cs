@@ -88,6 +88,11 @@ public class Grid : MonoBehaviour
         return true;
     }
 
+    public bool CheckOccupied(Vector2Int posOnGrid)
+    {
+        return GetPlacedObject(posOnGrid) != null;
+    }
+
     internal bool CheckBoundry(int posX, int posY)
     {
         if (posX < 0 || posX >= length)

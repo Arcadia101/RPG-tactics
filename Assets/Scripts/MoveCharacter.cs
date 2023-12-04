@@ -26,6 +26,11 @@ public class MoveCharacter : MonoBehaviour
         gridHighlight.Highlight(walkableNodes);
     }
 
+    public bool CheckOccupied(Vector2Int posOnGrid)
+    {
+        return targetGrid.CheckOccupied(posOnGrid);
+    }
+
     public List<PathNode> GetPath(Vector2Int from)
     {
         List<PathNode> path = pathfinding.TraceBackPath(from.x, from.y);

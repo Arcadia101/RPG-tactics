@@ -6,6 +6,7 @@ public class SelectCharacter : MonoBehaviour
 {
     MouseInput mouseInput;
     CommandMenu commandMenu;
+    TurnMenu turnMenu;
 
     public Character selected;
     GridObject hoverOverGridObject;
@@ -17,6 +18,7 @@ public class SelectCharacter : MonoBehaviour
     {
         mouseInput = GetComponent<MouseInput>();
         commandMenu = GetComponent<CommandMenu>();
+        turnMenu = GetComponent<TurnMenu>();
     }
 
 
@@ -32,6 +34,14 @@ public class SelectCharacter : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (selected != null)
+            {
+                return;
+            }
+            if (turnMenu.turnPanel.activeInHierarchy == true)
+            {
+                return;
+            }
             if (hoverOverCharacter != null && selected == null)
             {
                 selected = hoverOverCharacter;

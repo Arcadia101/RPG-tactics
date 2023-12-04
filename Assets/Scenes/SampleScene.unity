@@ -879,7 +879,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4331887, y: 1.0750741e-15, z: -4.13456e-16, w: 0.90130323}
+  m_LocalRotation: {x: 0.43318874, y: -0.000000026860933, z: 0.000000012910031, w: 0.9013033}
   m_LocalPosition: {x: 21.4, y: 25, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1065,6 +1065,14 @@ MonoBehaviour:
   movementPoints: 50
   attackRange: 2
   damage: 20
+  accuracy: 0.75
+  dodge: 0.1
+  criticalChance: 0.1
+  criticalDamageMultiplicator: 1.5
+  armor: 10
+  damageType: 0
+  resistance: 10
+  defeated: 0
 --- !u!4 &389844839
 Transform:
   m_ObjectHideFlags: 0
@@ -2391,6 +2399,14 @@ MonoBehaviour:
   movementPoints: 50
   attackRange: 2
   damage: 20
+  accuracy: 0.75
+  dodge: 0.1
+  criticalChance: 0.1
+  criticalDamageMultiplicator: 1.5
+  armor: 10
+  damageType: 0
+  resistance: 10
+  defeated: 0
 --- !u!4 &782323642
 Transform:
   m_ObjectHideFlags: 0
@@ -2419,7 +2435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c97c7c237e06041ea8ad20a7435018e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 5
 --- !u!114 &782323644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3195,7 +3211,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148311719}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4331887, y: 1.0750741e-15, z: -4.13456e-16, w: 0.90130323}
+  m_LocalRotation: {x: 0.43318874, y: -0.000000026860933, z: 0.000000012910031, w: 0.9013033}
   m_LocalPosition: {x: 21.4, y: 25, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3893,6 +3909,14 @@ MonoBehaviour:
   movementPoints: 50
   attackRange: 2
   damage: 20
+  accuracy: 0.75
+  dodge: 0.1
+  criticalChance: 0.1
+  criticalDamageMultiplicator: 1.5
+  armor: 10
+  damageType: 0
+  resistance: 10
+  defeated: 0
 --- !u!4 &1389236788
 Transform:
   m_ObjectHideFlags: 0

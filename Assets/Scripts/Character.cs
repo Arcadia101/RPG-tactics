@@ -39,7 +39,13 @@ public class Character : MonoBehaviour
     public Int2Val health = new Int2Val(100,100);
     public int attackRange = 1;
     public int damage = 20;
-
+    public float accuracy = 0.75f;
+    public float dodge = 0.1f;
+    public float criticalChance = 0.1f;
+    public float criticalDamageMultiplicator = 1.5f;
+    public int armor = 10;
+    public DamageType damageType;
+    public int resistance = 10;
     public bool defeated;
 
     CharacterAnimator characterAnimator;
