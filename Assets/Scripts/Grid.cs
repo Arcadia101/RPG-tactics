@@ -10,10 +10,10 @@ public class Grid : MonoBehaviour
     [SerializeField] float cellSize = 1f;
     [SerializeField] LayerMask obstacleLayer;
     [SerializeField] LayerMask terrainLayer;
+    
     private void Awake() 
     {
         GenerateGrid();
-        
     }
 
     public List<Vector3> ConvertPathNodesToWorldPos(List<PathNode> path)
