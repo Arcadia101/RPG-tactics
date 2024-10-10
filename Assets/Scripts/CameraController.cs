@@ -26,14 +26,16 @@ public class CameraController : MonoBehaviour
    {
         //alive = VisionManager.instance.Unit.gameObject.GetComponent<UnitController>().isAlive;
         
-        if (GameManager.gameManager.gameState == GameManager.GameState.Idle)
+        /*
+         if (GameManager.gameManager.gameState == GameManager.GameState.Idle)
         {
             return;
         }
         if (GameManager.gameManager.gameState == GameManager.GameState.Pause)
         {
             pausa = true;
-        }     
+        }
+        */     
         if(!pausa)
         {
             CameraMovement();
@@ -97,7 +99,7 @@ public class CameraController : MonoBehaviour
 
         float moveSpeed = 10f;
         Vector3 position = transform.position;
-        position += moveDir * moveSpeed *Time.deltaTime;
+        position += moveDir * (moveSpeed * Time.deltaTime);
         position.x = Mathf.Clamp(position.x, bottomLeftBorder.position.x, topRightBorder.position.x);
         position.z = Mathf.Clamp(position.z, bottomLeftBorder.position.z, topRightBorder.position.z);
         transform.position = position;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,9 +12,19 @@ public class Grid : MonoBehaviour
     [SerializeField] LayerMask obstacleLayer;
     [SerializeField] LayerMask terrainLayer;
     
+    //tiles
+
+    [SerializeField] private GridHighlight gridHighlight;
+    
+    
     private void Awake() 
     {
         GenerateGrid();
+    }
+
+    private void Start()
+    {
+        PrintGridTiles();
     }
 
     public List<Vector3> ConvertPathNodesToWorldPos(List<PathNode> path)
@@ -156,7 +167,20 @@ public class Grid : MonoBehaviour
         
     }
 
-
+    private void PrintGridTiles()
+    {
+        List<Vector2Int> gridPos = new List<Vector2Int>();
+        for (int y = 0; y < width; y++)
+        {
+            for (int x = 0; x < length; x++)
+            {
+                Vector3 pos = GetWorldPosition(x, y, true);
+                gridPos.Add(GetGridPos(pos));
+            }
+        }
+        
+        gridHighlight.Highlight(gridPos);
+    }
     private void OnDrawGizmos() 
     {
         if (grid == null)
